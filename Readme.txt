@@ -1,13 +1,14 @@
-# Student Performance Clustering using K-Means
+# Student Performance Prediction using Supervised Learning
 
 ## Project Overview
-This project uses the K-Means clustering algorithm to group students based on various performance indicators. It aims to analyze students' academic and extracurricular performance and provide personalized feedback based on their cluster.
+This project initially utilized K-Means clustering to group students based on various performance indicators. However, after evaluating the scalability of the approach, we transitioned to supervised learning techniques, specifically **Random Forest** and **Regression Models**, to provide more accurate predictions and personalized feedback.
 
 ## Key Features
-- Data preprocessing and scaling using `StandardScaler`.
-- K-Means clustering to group students into performance categories.
-- Predictive model allowing new student data to be classified into a cluster.
-- Personalized feedback based on the predicted cluster, highlighting areas for improvement.
+- **Data Preprocessing**: Handling missing values, encoding categorical data, and scaling numerical values.
+- **Supervised Learning Approach**: Implementing **Random Forest Classification** for performance prediction and **Regression Models** for score estimation.
+- **Personalized Feedback**: Based on predicted performance categories and estimated scores.
+- **Model Evaluation**: Using accuracy, precision, and mean absolute error to assess model performance.
+- **CSV and PDF Output**: Predictions are stored in **CSV format**, including performance marks and labels (High, Medium, Low), while **PDF reports** visualize performance using radar charts.
 
 ## Technologies Used
 - Python
@@ -22,68 +23,77 @@ The dataset includes the following features:
 - `CGPA`: Student's academic performance.
 - `Part of any club or society`: Categorical (0: None, 1: Club, 2: Society, 3: Both).
 - `Position in club or society`: Categorical (0: Not a part, 1: Intern, 2: Co-executive, 3: Executive, 4: Director, 5: Treasurer, 6: Joint-secretary, 7: Secretary, 8: Student advisor).
-- `Sports`: Categorical (0: None, 1: Plays outdoor game, 2: Plays indoor game).
-- `Any internship yet`: Categorical (0: No, 1: Online, 2: Offline).
-- `How many Competitions participated?`
-- `Participated in hackathon?`: Binary (0: No, 1: Yes).
-- `How many Online hackathons?`
-- `How many Offline hackathons?`
+- `Sports Participation`: Categorical (0: None, 1: Plays outdoor game, 2: Plays indoor game).
+- `Internships`: Categorical (0: No, 1: Online, 2: Offline).
+- `Number of Competitions Participated`
+- `Participation in Hackathons`: Binary (0: No, 1: Yes).
+- `Online and Offline Hackathon Count`
+- `Final Performance Label`: (Used for training supervised models)
 
 ## Project Workflow
 1. **Data Preprocessing:**
-    - Convert non-numeric values to numeric using `pd.to_numeric()`.
-    - Handle missing values by dropping or imputing.
-    - Scale the data using `StandardScaler`.
+    - Convert non-numeric values to numeric using encoding techniques.
+    - Handle missing values by filling or imputing.
+    - Scale numerical features using `StandardScaler`.
 
 2. **Model Training:**
-    - Apply K-Means clustering with an optimal number of clusters (determined using the elbow method).
-    - Save the trained scaler and K-Means model using `joblib`.
+    - Train a **Random Forest Classifier** to categorize students into performance groups.
+    - Use **Regression Models** to predict specific performance scores.
+    - Save the trained scaler and models using `joblib`.
 
-3. **User Input & Prediction:**
-    - Collect new student data.
-    - Scale input data using the saved scaler.
-    - Predict the cluster using the trained K-Means model.
-    - Provide personalized feedback based on the predicted cluster.
+3. **Prediction and Feedback Generation:**
+    - Input new student data.
+    - Scale and preprocess input using the trained scaler.
+    - Predict the performance category and estimated score.
+    - Save predictions in **CSV format** and generate a **PDF report** with radar charts.
 
 ## Running the Project
-1. **Install Required Libraries:**
+### Install Required Libraries
 ```bash
-pip install pandas numpy scikit-learn matplotlib
+pip install pandas numpy scikit-learn matplotlib joblib
 ```
-2. **Train the Model:**
-```python
+
+### Train the Model
+```bash
 python train_model.py
 ```
-3. **Predict and Provide Feedback:**
-```python
+
+### Predict and Provide Feedback
+```bash
 python predict_student_performance.py
 ```
 
-## Personalized Feedback
-- **Cluster 0 (Average Performance):** Suggestions to improve participation in competitions, clubs, and internships.
-- **Cluster 1 (Excellent Performance):** Positive feedback with encouragement to take leadership roles.
-- **Cluster 2 (Needs Improvement):** Strong suggestions to increase involvement in extracurriculars, hackathons, and internships.
+## Performance Categories and Feedback
+- **Category 0 (Average Performer):** Encouraged to improve participation in extracurriculars and internships.
+- **Category 1 (High Performer):** Advised to take on leadership roles and competitive projects.
+- **Category 2 (Needs Improvement):** Strong recommendations for increasing involvement in practical learning experiences.
 
 ## Visualization
-- Use Matplotlib to plot the elbow curve for selecting optimal K.
-- Visualize clusters if needed using scatter plots.
+- **Feature Importance Analysis** using Random Forest.
+- **Accuracy vs. Number of Trees** Graph for model evaluation.
+- **Predicted vs. Actual Scores** using Regression techniques.
+- **Radar Charts** in PDF format to visualize performance.
 
-## Saving and Loading Model
-- Use `joblib.dump()` to save `StandardScaler` and `KMeans` model.
-- Use `joblib.load()` to load the scaler and model during prediction.
+## Model Saving and Deployment
+- The trained **Random Forest Classifier** and **Regression Model** are saved using `joblib.dump()`.
+- The models are loaded for predictions using `joblib.load()`.
 
-## Example Output
+## Example Output for K-means
 ```
-Predicted Cluster: 2
+Predicted Performance Category: 2
 Performance Feedback:
-You need some improvement. Consider focusing on the following areas:
-- Boost your participation in competitions and hackathons.
-- Engage in a club or society to develop leadership and teamwork skills.
-- Look for internship opportunities to gain practical industry experience.
+You need improvement. Consider focusing on:
+- Participating in competitions and hackathons.
+- Joining clubs and societies to enhance teamwork skills.
+- Applying for internships to gain industry experience.
 ```
-
+## Example output for Random Forest and Regression based model Predicted_Performance_Marks  
+             Name         Uid Predicted_Performance_Label  \                            
+0       Meenakshy  22BAI71194                         Low                                20  
+1  SAMRIDHI SINGH  22BAI70775                      Medium                                60  
+2  Aditya Niphade  22BAI70091                        High                                88  
+3          Shreya  22BAI70099                         Low                                 2
+4      Mohd Rahil  22BAI70212                      Medium                                50
+                          100  
 ## Author
 Rohan Raghav
-
-## License
-This project is licensed under the MIT License.
